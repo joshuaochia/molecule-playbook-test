@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  gather_facts: yes
+  become: true
+  tasks:
+    - debug: var=ansible_os_family
+    - name: update apt cache
+      
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+      when: ansible_os_family == "Debian" 
+
+- import_playbook: "../../../main.yml"

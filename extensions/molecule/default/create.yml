@@ -1,0 +1,27 @@
+---
+- name: Create
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  tasks:
+    - include_vars: 
+        file: molecule.yml
+    - name: Create docker container
+
+      community.docker.docker_container:
+        name: "{{ platforms[0].name }}"
+        image: "{{ platforms[0].image }}"
+        privileged: true
+        volumes:
+          - /sys/fs/cgroup:/sys/fs/cgroup:ro
+        state: started
+        command: ""
+        log_driver: json-file
+      register: server
+
+    - name: Print some info
+      ansible.builtin.debug:
+        msg: "{{ server }}"
+    # TODO: Developer must implement and populate 'server' variable
+
